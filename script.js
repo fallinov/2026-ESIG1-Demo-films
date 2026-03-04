@@ -163,10 +163,22 @@ const films = [
  * @param {Object[]} liste - Le tableau de films à afficher
  */
 function afficherFilmsConsole(liste) {
-  // TODO : console.log le nombre de films
-  // TODO : for...of → pour chaque film :
+  // console.log le nombre de films
+  console.log("Nombre de films :" + liste.length);
+  // for...of → pour chaque film :
   //   - if/else : note >= 8.5 → "★★★", >= 7 → "★★", sinon "★"
   //   - console.log avec template literal
+  for (const film of liste) {
+    let etoiles;
+    if(film.note >= 8.5) {
+      etoiles = "★★★";
+    } else if(film.note >= 7) {
+      etoiles = "★★";
+    } else {
+      etoiles = "★";
+    }
+    console.log(`${etoiles} ${film.titre} (${film.annee})`);
+  }
 }
 
 afficherFilmsConsole(films);
@@ -186,6 +198,7 @@ afficherFilmsConsole(films);
  */
 function trierParNote(liste) {
   // TODO : return [...liste].sort(...)
+  return [...liste].sort((a, b) => b.note -  a.note);
 }
 
 console.log("\n--- Triés par note ---");
@@ -207,7 +220,16 @@ afficherFilmsConsole(trierParNote(films));
  */
 function rechercherFilm(liste, terme) {
   // TODO : si pas de terme → retourner la liste entière
+  if(terme.length < 1) {
+    return [];
+  }
   // TODO : filter → titre OU réalisateur contient le terme
+  terme = terme.toLowerCase();
+  return liste.filter((film) =>
+      film.realisateur.toLowerCase().includes(terme) ||
+      film.titre.toLowerCase().includes(terme)
+  );
+
 }
 
 console.log("\n--- Recherche 'nolan' ---");
