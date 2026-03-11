@@ -221,7 +221,7 @@ afficherFilmsConsole(trierParNote(films));
 function rechercherFilm(liste, terme) {
   // TODO : si pas de terme → retourner la liste entière
   if(terme.length < 1) {
-    return [];
+    return liste;
   }
   // TODO : filter → titre OU réalisateur contient le terme
   terme = terme.toLowerCase();
@@ -250,6 +250,17 @@ afficherFilmsConsole(rechercherFilm(films, "nolan"));
 function creerCarteFilm(film) {
   // TODO : retourner un template literal avec le HTML
   // Voir la carte d'exemple commentée dans index.html
+  return `<article class="film-card">
+            <img src="${film.poster}" alt="${film.titre}" class="film-poster">
+              <div class="film-info">
+                <h3>${film.titre}</h3>
+                <p class="film-meta">${film.annee} · ${film.genre}</p>
+                <p class="film-realisateur">${film.realisateur}</p>
+                <div class="film-note">
+                  <span class="note-badge">${film.note}</span>
+                </div>
+              </div>
+          </article>`;
 }
 
 /**
@@ -259,9 +270,19 @@ function creerCarteFilm(film) {
  */
 function afficherFilmsHTML(liste) {
   // TODO : sélectionner #films-container
+  const container = document.querySelector("#films-container");
   // TODO : si liste vide → message "Aucun film trouvé"
+  if(liste.length === 0) {
+    container.innerHTML = `<p class="empty-message">Aucun film trouvé !</p>`;
+  }
+  // Supprime tous les films du container
+  container.innerHTML = "";
   // TODO : sinon → forEach pour construire le HTML
+  liste.forEach(film => {
+    container.innerHTML += creerCarteFilm(film);
+  });
 }
+
 
 
 // ============================================================
@@ -274,9 +295,15 @@ function afficherFilmsHTML(liste) {
  */
 function rafraichir() {
   // TODO : lire la valeur de #recherche
+  const recherche = document.querySelector("#recherche").value;
   // TODO : chaîner rechercherFilm → trierParNote → afficherFilmsHTML
+  let filmsTrouves = rechercherFilm(films, recherche);
+  afficherFilmsHTML(filmsTrouves);
 }
 
 // TODO : addEventListener "input" sur #recherche → rafraichir
+document.querySelector("#recherche")
+    .addEventListener("input", rafraichir);
 
 // TODO : appeler rafraichir() pour l'affichage initial
+rafraichir();
